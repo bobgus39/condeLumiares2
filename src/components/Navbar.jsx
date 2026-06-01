@@ -8,7 +8,7 @@ import {
   NavbarMenu,
   NavbarMenuItem,
   Button,
-} from '@heroui/react' // verificar props en https://www.heroui.com/docs/components/navbar
+} from '@heroui/react'
 
 const navLinks = [
   { label: 'Inicio', href: 'inicio' },
@@ -61,13 +61,43 @@ export default function NavbarComponent() {
       height="4rem"
       classNames={{ wrapper: 'px-4 sm:px-5 max-w-full w-full' }}
     >
-      {/* Brand */}
-      <NavbarContent justify="start">
-        {/* Hamburger — visible solo bajo lg */}
+      {/* Hamburger — solo móvil/tablet */}
+      <NavbarContent justify="start" className="lg:hidden shrink-0 basis-auto">
         <NavbarMenuToggle
           aria-label={isMenuOpen ? 'Cerrar menú' : 'Abrir menú'}
-          className={`lg:hidden transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`}
+          className={`transition-colors ${isScrolled ? 'text-charcoal' : 'text-white'}`}
         />
+      </NavbarContent>
+
+      {/* Brand centrado en móvil, a la izquierda en desktop */}
+      <NavbarContent justify="center" className="lg:hidden">
+        <NavbarBrand
+          as="button"
+          onClick={() => scrollToSection('inicio')}
+          className="cursor-pointer"
+        >
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-sage flex items-center justify-center shrink-0">
+              <span className="text-white text-xs font-semibold">C</span>
+            </div>
+            <span
+              className={`font-display text-lg font-medium tracking-wide transition-colors duration-300 ${
+                isScrolled ? 'text-charcoal' : 'text-white'
+              }`}
+            >
+              Conde Lumiares
+            </span>
+          </div>
+        </NavbarBrand>
+      </NavbarContent>
+
+      {/* Espacio derecho para equilibrar el layout en móvil */}
+      <NavbarContent justify="end" className="lg:hidden shrink-0 basis-auto">
+        <div className="w-8" />
+      </NavbarContent>
+
+      {/* Brand — solo desktop */}
+      <NavbarContent justify="start" className="hidden lg:flex">
         <NavbarBrand
           as="button"
           onClick={() => scrollToSection('inicio')}
@@ -88,7 +118,7 @@ export default function NavbarComponent() {
         </NavbarBrand>
       </NavbarContent>
 
-      {/* Links — solo desde lg (1024px) */}
+      {/* Links — solo desktop */}
       <NavbarContent className="hidden lg:flex gap-0" justify="center">
         {navLinks.map((link) => (
           <NavbarItem key={link.href}>
@@ -111,9 +141,9 @@ export default function NavbarComponent() {
         ))}
       </NavbarContent>
 
-      {/* CTA — solo desde lg */}
-      <NavbarContent justify="end">
-        <NavbarItem className="hidden lg:flex">
+      {/* CTA — solo desktop */}
+      <NavbarContent justify="end" className="hidden lg:flex">
+        <NavbarItem>
           <Button
             onClick={() => scrollToSection('reservar')}
             size="sm"
@@ -128,11 +158,11 @@ export default function NavbarComponent() {
         </NavbarItem>
       </NavbarContent>
 
-      {/* Menú móvil — visible bajo lg */}
+      {/* Menú móvil */}
       <NavbarMenu
         className={`backdrop-blur-xl rounded-b-2xl pt-3 pb-5 gap-0.5 border-x border-b
           ${isScrolled ? 'bg-cream/98 border-nude/30' : 'bg-charcoal/95 border-white/10'}`}
-        style={{ top: '3.8rem' }}
+        style={{ top: '4rem' }}
       >
         {navLinks.map((link) => (
           <NavbarMenuItem key={link.href}>
@@ -141,9 +171,9 @@ export default function NavbarComponent() {
                 scrollToSection(link.href)
                 setIsMenuOpen(false)
               }}
-              className={`w-full text-left px-4 py-2.5 text-sm font-medium rounded-xl transition-colors duration-200
+              className={`w-full text-left px-4 py-3 text-sm font-medium rounded-xl transition-colors duration-200
                 ${activeSection === link.href
-                  ? isScrolled ? 'text-sage bg-sage/10' : 'text-sage bg-sage/10'
+                  ? 'text-sage bg-sage/10'
                   : isScrolled
                   ? 'text-charcoal/75 hover:text-charcoal hover:bg-warm'
                   : 'text-white/75 hover:text-white hover:bg-white/10'
